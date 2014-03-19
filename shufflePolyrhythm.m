@@ -1,16 +1,18 @@
 function rhythm = shufflePolyrhythm(k1,k2,m1,m2,phaseShift,reps)
 
-% Plays two-component polyrhythm using bjorklund-spaced rhythms provided in
+% Plays a shuffled two-component polyrhythm using bjorklund-spaced rhythms provided in
 % Bjorklund algorithm
 
-% m = total number of time bins
-% k1 = total number of pulses in rhythm 1 that fit into m time bins
-% k2 = total number of pulses in rhythm 2 that fit into m time bins
+% m1 = total number of time bins for rhythm1
+% m2 = total number of time bins for rhythm2
+% k1 = total number of pulses in rhythm 1 that fit into m1 time bins
+% k2 = total number of pulses in rhythm 2 that fit into m2 time bins
+% phaseShift = # pulses by which to shift rhythm2 relative to rhythm1
 % reps = total number of repetitions of rhythm
 
 % Author: Judy Fan (based upon code by Mariam Aly)
 % Created: Mar 11 2014
-% Last updated: Mar 19 2014
+% Last updated: Mar 19 2014 by MA
 
 % see related: bjorklundAlgorithm, playEuclideanRhythm
 % ======================================================================
@@ -42,7 +44,7 @@ totalLength = max(length(sequence1),length(sequence2));
 if length(sequence1) < totalLength
     sequence1 = [sequence1 zeros(1,totalLength-length(sequence1))];
 elseif length(sequence2) < totalLength
-    sequence2 = [sequence2 zeros(1,totalLength-length(sequence2))]
+    sequence2 = [sequence2 zeros(1,totalLength-length(sequence2))];
 end
 
 full_sequence = sum([sequence1; sequence2]); rhythm = full_sequence;
