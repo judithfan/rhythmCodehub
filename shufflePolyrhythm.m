@@ -10,7 +10,7 @@ function rhythm = shufflePolyrhythm(k1,k2,m1,m2,phaseShift,reps)
 % phaseShift = # pulses by which to shift rhythm2 relative to rhythm1
 % reps = total number of repetitions of rhythm
 
-% Author: Judy Fan (based upon code by Mariam Aly)
+% Authors: {Judy Fan, Mariam Aly}
 % Created: Mar 11 2014
 % Last updated: Mar 19 2014 by MA
 
@@ -64,10 +64,10 @@ end
 y = repmat(y,1,reps); % produce # reps copies of rhythm 
 
 sound(y, Fs);  %# Play sound at sampling rate Fs
-
-wavwrite(y, Fs, 8, ['polyEuclideanrhythm_k' num2str(k1) '_k'  num2str(k2) '_m' num2str(m1) '_m' num2str(m2) '_pS' num2str(phaseShift) '.wav']);
+cd('shuff_wav_files')
+wavwrite(y, Fs, 8, ['shuffledPolyEuclideanrhythm_k' num2str(k1) '_k'  num2str(k2) '_m' num2str(m1) '_m' num2str(m2) '_pS' num2str(phaseShift) '.wav']);
 %# Save as an 8-bit, 1 kHz signal
-
+cd ..
 end
     
 
