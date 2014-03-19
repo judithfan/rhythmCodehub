@@ -199,10 +199,10 @@ for trial_index = 1:n_trials
                 response_start   = Screen('Flip', MainWindow);
                 response_attempt = response_attempt+1;
                 response{response_attempt} = []; %#ok<SAGROW>
-                WaitSecs(.1);
+                WaitSecs(.1);   %preventing repeated responses
             else if keyCode(space)
                 response{response_attempt} = [response{response_attempt}, secs - stim_end]; %#ok<SAGROW>
-                WaitSecs(.1);
+                WaitSecs(.1);   %preventing repeated responses
                 else if keyCode(rshift)
                         break;                     
                     end
