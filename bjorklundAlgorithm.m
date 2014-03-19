@@ -61,8 +61,9 @@ sequence = num2str(sequence);
 sequence = arrayfun(@str2double, sequence);
 sequence = sequence(~isnan(sequence));
 
+cd('stim_mats')
 save(['euclidean_rhythm_' num2str(pulses) '_' num2str(totalN)],'sequence', 'pulses', 'totalN');
-
+cd ..
 % fprintf('Saved your sequence. Done!\n');
    
 end
