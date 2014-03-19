@@ -49,9 +49,9 @@ full_sequence = sum([sequence1; sequence2]); rhythm = full_sequence;
 
 % make and play full sequence
 for thisBeat = 1:length(full_sequence)
-    if full_sequence(thisBeat) > 1
+    if rhythm(thisBeat) > 1
         y = horzcat(y,toneEvent2);
-    elseif full_sequence(thisBeat) == 1
+    elseif rhythm(thisBeat) == 1
         y = horzcat(y,toneEvent);
     else
         y = horzcat(y,restEvent);
