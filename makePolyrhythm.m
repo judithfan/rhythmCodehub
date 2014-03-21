@@ -12,7 +12,7 @@ function rhythm = makePolyrhythm(k1,k2,m1,m2,phaseShift,reps)
 
 % Author: {Mariam Aly, Judy Fan}
 % Created: Mar 11 2014
-% Last updated: Mar 19 2014 by MA
+% Last updated: Mar 21 2014 by MA
 
 % see related: bjorklundAlgorithm, playEuclideanRhythm
 % ======================================================================
@@ -33,7 +33,9 @@ Fs = 44000;      %# Samples per second
 toneFreq = 440;  %# Tone frequency, in Hertz
 nSeconds = 0.1;   %# Duration of the sound
 toneEvent = sin(linspace(0, nSeconds*toneFreq*2*pi, round(nSeconds*Fs)));
+toneEvent = [toneEvent zeros(1,length(toneEvent)/2)]; % adding rest at end of toneEvent
 toneEvent2 = 1.5*sin(linspace(0,nSeconds*toneFreq*2*pi, round(nSeconds*Fs)));
+toneEvent2 = [toneEvent2 zeros(1,length(toneEvent2)/2)]; % adding rest at end of toneEvent2
 
 restEvent = zeros(1,length(toneEvent));
 y = [];
