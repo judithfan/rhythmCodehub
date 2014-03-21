@@ -72,5 +72,3 @@ wavwrite(y, Fs, 8, ['polyEuclideanrhythm_k' num2str(k1) '_k'  num2str(k2) '_m' n
 cd ..
 
 end
-    
-

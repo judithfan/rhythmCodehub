@@ -12,7 +12,7 @@ function rhythm = shufflePolyrhythm(k1,k2,m1,m2,phaseShift,reps)
 
 % Authors: {Judy Fan, Mariam Aly}
 % Created: Mar 11 2014
-% Last updated: Mar 19 2014 by MA
+% Last updated: Mar 21 2014 by MA
 
 % see related: bjorklundAlgorithm, playEuclideanRhythm
 % ======================================================================
