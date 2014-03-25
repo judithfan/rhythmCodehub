@@ -30,7 +30,7 @@ sequence2 = [zeros(1,phaseShift) sequence2];
 
 % sound sepcs
 Fs = 44000;      %# Samples per second
-toneFreq = 440;  %# Tone frequency, in Hertz
+toneFreq = 220;  %# Tone frequency, in Hertz
 nSeconds = 0.1;   %# Duration of the sound
 toneEvent = sin(linspace(0, nSeconds*toneFreq*2*pi, round(nSeconds*Fs)));
 toneEvent = [toneEvent zeros(1,length(toneEvent)/2)]; % adding rest at end of toneEvent
@@ -50,6 +50,10 @@ elseif length(sequence2) < totalLength
 end
 
 full_sequence = sum([sequence1; sequence2]); rhythm = full_sequence;
+
+% pad sequence with rests
+full_sequence = padSequenceWithRests(full_sequence); rhythm = full_sequence;
+
 rhythm = Shuffle(rhythm);
 
 % make and play full sequence
