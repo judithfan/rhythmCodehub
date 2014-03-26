@@ -1,4 +1,4 @@
-function rhythm = shufflePolyrhythm(k1,k2,m1,m2,phaseShift,reps)
+function [rhythm, stackedCycles] = shufflePolyrhythm(k1,k2,m1,m2,phaseShift,reps)
 
 % Plays a shuffled two-component polyrhythm using bjorklund-spaced rhythms provided in
 % Bjorklund algorithm
@@ -18,7 +18,7 @@ function rhythm = shufflePolyrhythm(k1,k2,m1,m2,phaseShift,reps)
 % ======================================================================
 
 if ~exist('reps')
-   reps = 1; 
+    reps = 1;
 end
 
 % make Euclidean sequences
@@ -33,9 +33,9 @@ Fs = 44000;      %# Samples per second
 toneFreq = 220;  %# Tone frequency, in Hertz
 nSeconds = 0.1;   %# Duration of the sound
 toneEvent = sin(linspace(0, nSeconds*toneFreq*2*pi, round(nSeconds*Fs)));
-toneEvent = [toneEvent zeros(1,length(toneEvent)/2)]; % adding rest at end of toneEvent
+% % toneEvent = [toneEvent zeros(1,length(toneEvent)/2)]; % adding rest at end of toneEvent
 toneEvent2 = 1.5*sin(linspace(0,nSeconds*toneFreq*2*pi, round(nSeconds*Fs)));
-toneEvent2 = [toneEvent2 zeros(1,length(toneEvent2)/2)]; % adding rest at end of toneEvent2
+% % toneEvent2 = [toneEvent2 zeros(1,length(toneEvent2)/2)]; % adding rest at end of toneEvent2
 
 restEvent = zeros(1,length(toneEvent));
 y = [];
@@ -49,15 +49,16 @@ elseif length(sequence2) < totalLength
     sequence2 = [sequence2 zeros(1,totalLength-length(sequence2))];
 end
 
-full_sequence = sum([sequence1; sequence2]); rhythm = full_sequence;
+rhythm = sum([sequence1; sequence2]); 
 
 % pad sequence with rests
-full_sequence = padSequenceWithRests(full_sequence); rhythm = full_sequence;
+rhythm = padSequenceWithRests(rhythm); 
 
 rhythm = Shuffle(rhythm);
+rhythm = repmat(rhythm,1,reps); stackedCycles = repmat(rhythm,reps,1);
 
 % make and play full sequence
-for thisBeat = 1:length(full_sequence)
+for thisBeat = 1:length(rhythm)
     if rhythm(thisBeat) > 1
         y = horzcat(y,toneEvent2);
     elseif rhythm(thisBeat) == 1
@@ -67,7 +68,7 @@ for thisBeat = 1:length(full_sequence)
     end
 end
 
-y = repmat(y,1,reps); % produce # reps copies of rhythm 
+% % % y = repmat(y,1,reps); % produce # reps copies of rhythm
 
 sound(y, Fs);  %# Play sound at sampling rate Fs
 cd('shuff_wav_files')
@@ -75,5 +76,5 @@ wavwrite(y, Fs, 8, ['shuffledPolyEuclideanrhythm_k' num2str(k1) '_k'  num2str(k2
 %# Save as an 8-bit, 1 kHz signal
 cd ..
 end
-    
+
 

@@ -1,4 +1,4 @@
-function rhythm = makePolyrhythm(k1,k2,m1,m2,phaseShift,reps)
+function rhythm = makePolyrhythm(k1,k2,m1,m2,phaseShift,reps,shuffle)
 
 % Plays two-component polyrhythm using bjorklund-spaced rhythms provided in
 % Bjorklund algorithm
@@ -9,6 +9,8 @@ function rhythm = makePolyrhythm(k1,k2,m1,m2,phaseShift,reps)
 % k2 = total number of pulses in rhythm 2 that fit into m2 time bins
 % phaseShift = # pulses by which to shift rhythm2 relative to rhythm1
 % reps = total number of repetitions of rhythm
+% shuffle = flag for whether you want to shuffle the rhythm or not (prior
+% to repeating)
 
 % Author: {Mariam Aly, Judy Fan}
 % Created: Mar 11 2014
@@ -19,6 +21,10 @@ function rhythm = makePolyrhythm(k1,k2,m1,m2,phaseShift,reps)
 
 if ~exist('reps')
    reps = 1; 
+end
+
+if ~exist('shuffle')
+    shuffle = 0; % default is not to shuffle, obvi
 end
 
 % make Euclidean sequences
@@ -33,9 +39,8 @@ Fs = 44000;      %# Samples per second
 toneFreq = 220;  %# Tone frequency, in Hertz
 nSeconds = 0.1;   %# Duration of the sound
 toneEvent = sin(linspace(0, nSeconds*toneFreq*2*pi, round(nSeconds*Fs)));
-toneEvent = [toneEvent zeros(1,length(toneEvent)/2)]; % adding rest at end of toneEvent
 toneEvent2 = 1.5*sin(linspace(0,nSeconds*toneFreq*2*pi, round(nSeconds*Fs)));
-toneEvent2 = [toneEvent2 zeros(1,length(toneEvent2)/2)]; % adding rest at end of toneEvent2
+
 
 restEvent = zeros(1,length(toneEvent));
 y = [];
@@ -50,13 +55,19 @@ elseif length(sequence2) < totalLength
 end
 
 % compile sequence
-full_sequence = sum([sequence1; sequence2]); rhythm = full_sequence;
+rhythm = sum([sequence1; sequence2]); 
 
 % pad sequence with rests
-full_sequence = padSequenceWithRests(full_sequence); rhythm = full_sequence;
+rhythm = padSequenceWithRests(rhythm); 
+
+% IFF shuffle==1, then shuffle!
+if shuffle; rhythm = Shuffle(rhythm); end; 
+
+% loop through rhythm #reps times
+rhythm = repmat(rhythm,1,reps); 
 
 % make and play full sequence
-for thisBeat = 1:length(full_sequence)
+for thisBeat = 1:length(rhythm)
     if rhythm(thisBeat) > 1
         y = horzcat(y,toneEvent2);
     elseif rhythm(thisBeat) == 1
@@ -65,8 +76,6 @@ for thisBeat = 1:length(full_sequence)
         y = horzcat(y,restEvent);
     end
 end
-
-y = repmat(y,1,reps); % produce # reps copies of rhythm 
 
 sound(y, Fs);  %# Play sound at sampling rate Fs
 
