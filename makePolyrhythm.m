@@ -1,4 +1,4 @@
-function rhythm = makePolyrhythm(k1,k2,m1,m2,phaseShift,reps,shuffle)
+function seqs = makePolyrhythm(k1,k2,m1,m2,phaseShift,reps,shuffFlag)
 
 % Plays two-component polyrhythm using bjorklund-spaced rhythms provided in
 % Bjorklund algorithm
@@ -23,48 +23,56 @@ if ~exist('reps')
    reps = 1; 
 end
 
-if ~exist('shuffle')
-    shuffle = 0; % default is not to shuffle, obvi
+if ~exist('shuffFlag')
+    shuffFlag = 0; % default is not to shuffle, obvi
 end
 
 % make Euclidean sequences
 sequence1 = bjorklundAlgorithm(k1,m1);
 sequence2 = bjorklundAlgorithm(k2,m2);
 
-% do phase shift
-sequence2 = [zeros(1,phaseShift) sequence2];
-
 % sound sepcs
 Fs = 44000;      %# Samples per second
 toneFreq = 220;  %# Tone frequency, in Hertz
 nSeconds = 0.1;   %# Duration of the sound
 toneEvent = sin(linspace(0, nSeconds*toneFreq*2*pi, round(nSeconds*Fs)));
-toneEvent2 = 1.5*sin(linspace(0,nSeconds*toneFreq*2*pi, round(nSeconds*Fs)));
-
+toneEvent2 = 1.25*sin(linspace(0,nSeconds*toneFreq*2*pi, round(nSeconds*Fs)));
 
 restEvent = zeros(1,length(toneEvent));
 y = [];
 
-% add sequences together
-totalLength = max(length(sequence1),length(sequence2));
+totalLength = max(length(sequence1),length(sequence2))*reps;
 
-if length(sequence1) < totalLength
-    sequence1 = [sequence1 zeros(1,totalLength-length(sequence1))];
-elseif length(sequence2) < totalLength
-    sequence2 = [sequence2 zeros(1,totalLength-length(sequence2))];
-end
+% loop through rhythm as many times as fits into totalLength, keep
+% remainder
+sequence1 = repmat(sequence1,1,ceil(totalLength/length(sequence1))); 
+sequence2 = repmat(sequence2,1,ceil(totalLength/length(sequence2))); 
+
+% do phase shift
+sequence2 = [zeros(1,phaseShift) sequence2];
+
+% add sequences together
+sequence1 = sequence1(1:totalLength);
+sequence2 = sequence2(1:totalLength);
 
 % compile sequence
 rhythm = sum([sequence1; sequence2]); 
 
-% pad sequence with rests
-rhythm = padSequenceWithRests(rhythm); 
+seqs.full.polyR = rhythm;
+seqs.full.comp1 = sequence1;
+seqs.full.comp2 = sequence2;
+
+seqs.single.polyR = rhythm(1:totalLength/reps);
+seqs.single.comp1 = sequence1(1:totalLength/reps);
+seqs.single.comp2 = sequence2(1:totalLength/reps);
 
 % IFF shuffle==1, then shuffle!
-if shuffle; rhythm = Shuffle(rhythm); end; 
+if shuffFlag; rhythm = Shuffle(rhythm); end; 
 
-% loop through rhythm #reps times
-rhythm = repmat(rhythm,1,reps); 
+% pad sequence with rests just before building audio file
+rhythm = padSequenceWithRests(rhythm); 
+sequence1 = padSequenceWithRests(sequence1); 
+sequence2 = padSequenceWithRests(sequence2);
 
 % make and play full sequence
 for thisBeat = 1:length(rhythm)
@@ -77,11 +85,47 @@ for thisBeat = 1:length(rhythm)
     end
 end
 
-sound(y, Fs);  %# Play sound at sampling rate Fs
+% play sound?
+% sound(y, Fs);  %# Play sound at sampling rate Fs
 
+seqs.y = y;
+seqs.Fs = Fs;
+
+% save audio file
 cd('poly_wav_files')
 %# Save as an 8-bit, 1 kHz signal
 wavwrite(y, Fs, 8, ['polyEuclideanrhythm_k' num2str(k1) '_k'  num2str(k2) '_m' num2str(m1) '_m' num2str(m2) '_pS' num2str(phaseShift) '.wav']);
 cd ..
+
+% save descriptive stats
+seqs.stats.proportion = mean(rhythm);
+
+% make simple visualization
+f1 = figure(1);
+subplot(2,1,1);
+purple = [0.8 0.4 0.8];
+peach = [0.8 0.4 0.4];
+blue = [0.4 0.4 0.8];
+gray = [0.8 0.8 0.8];
+dataVec = seqs.single.polyR;
+plot(dataVec,'LineWidth',2,'Color',gray); hold on;
+scatter(1:length(dataVec),dataVec,40,purple,'filled'); hold on;
+xlim([0 length(dataVec)+1]);
+ylim([-0.2 2.2]);
+xlabel('Time Bin')
+ylabel('Pulse Amplitude')
+title('Final Polyrhythm')
+subplot(2,1,2);
+dataVec = seqs.single.comp1;
+plot(dataVec,'LineWidth',2,'Color',gray); hold on;
+scatter(1:length(dataVec),dataVec,40,peach,'filled'); hold on;
+dataVec = seqs.single.comp2;
+plot(dataVec,'LineWidth',2,'Color',gray); hold on;
+scatter(1:length(dataVec),dataVec,40,blue,'filled'); hold on;
+xlim([0 length(dataVec)+1]);
+ylim([-0.2 2.2]);
+xlabel('Time Bin')
+ylabel('Pulse Amplitude')
+title('Component Rhythms')
 
 end
