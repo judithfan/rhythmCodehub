@@ -61,8 +61,3 @@ end
 for j = 1:howManyComb
     makePolyrhythm(er_comb_filt(j,1),er_comb_filt(j,3),er_comb_filt(j,2),er_comb_filt(j,4),phaseShift,reps,shuffFlag)
 end
-
-
-    
-    
-    
