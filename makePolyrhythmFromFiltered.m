@@ -1,12 +1,12 @@
-function makePolyrhythmFromFiltered(howManySelf, howManyComb, phaseShift, reps, shuffFlag)
+function makePolyrhythmFromFiltered(phaseShift, reps, shuffFlag, howManySelf, howManyComb)
 
-% makes the polyrhythms we arrived at after running ER_filtration
+% makes the polyrhythms we arrived at from ER_filtration
 %
-% howManySelf = # rhythms you want to make that are ER + itself < default : all >
-% howManyComb = # rhythms you want to make that are two diff. ERs < default : all >
 % phaseShift = # pulses by which to shift rhythm2 relative to rhythm1 < default : 0 >
 % reps = # repetitions of rhythm < default : 1 >
 % shuffFlag = shuffle the rhythm or not? (prior to repeating) < default : 0 >
+% howManySelf = # rhythms you want to make that are ER + itself < default : all >
+% howManyComb = # rhythms you want to make that are two diff. ERs < default : all >
 %
 % Author: Mariam Aly
 % Created: March 27, 2014
