@@ -96,7 +96,7 @@ for thisBeat = 1:length(rhythm)
 end
 
 % play sound?
-% sound(y, Fs);  %# Play sound at sampling rate Fs
+sound(y, Fs);  %# Play sound at sampling rate Fs
 
 seqs.y = y;
 seqs.Fs = Fs;
@@ -111,6 +111,7 @@ cd ..
 seqs.stats.proportion = mean(rhythm);
 
 % make simple visualization
+close(1);
 f1 = figure(1);
 subplot(2,1,1);
 purple = [0.8 0.4 0.8];
@@ -126,12 +127,13 @@ xlabel('Time Bin')
 ylabel('Pulse Amplitude')
 title('Final Polyrhythm')
 subplot(2,1,2);
+jitter = 0.1;
 dataVec = seqs.single.comp1;
 plot(dataVec,'LineWidth',2,'Color',gray); hold on;
-scatter(1:length(dataVec),dataVec,40,peach,'filled'); hold on;
+scatter(1-jitter:length(dataVec)-jitter,dataVec,40,peach,'filled'); hold on;
 dataVec = seqs.single.comp2;
 plot(dataVec,'LineWidth',2,'Color',gray); hold on;
-scatter(1:length(dataVec),dataVec,40,blue,'filled'); hold on;
+scatter(1+jitter:length(dataVec)+jitter,dataVec,40,blue,'filled'); hold on;
 xlim([0 length(dataVec)+1]);
 ylim([-0.2 2.2]);
 xlabel('Time Bin')
