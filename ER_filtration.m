@@ -65,20 +65,22 @@ end
 
 numER_combs_filt = size(er_comb_filt,1);
 
-for i = 1:numER_combs_filt
+%filtering combinations again
+er_comb_filt_filt = [];
 
+for i = 1%:numER_combs_filt
     k1 = er_comb_filt(i,1);
     m1 = er_comb_filt(i,2);
     k2 = er_comb_filt(i,3);
     m2 = er_comb_filt(i,4);
     
-for phase_shift = 0:3
-    
-    er_comb_filt
-    
-    
-   rhythm = polyrhythmSequence(k1,k2,m1,m2,phaseShift)
-
+    for phase_shift = 0:3
+       rhythm = polyrhythmSequence(k1,k2,m1,m2,phase_shift);
+       
+       
+       
+    end
+end
 
 
 
