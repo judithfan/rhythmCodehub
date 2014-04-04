@@ -40,7 +40,7 @@ end
 
 % defaults to 2 reps
 if ~exist('reps')
-   reps = 1;
+   reps = 2;
 end
 
 

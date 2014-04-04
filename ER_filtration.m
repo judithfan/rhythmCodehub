@@ -61,7 +61,16 @@ for i = 1:numER_combs
             er_comb_filt = [er_comb_filt; thisER]; %#ok<AGROW>
         end
     end
-
 end
+
+
+for phase_shift = 0:3
+    
+   rhythm = polyrhythmSequence(k1,k2,m1,m2,phaseShift)
+
+
+
+
+
 
 

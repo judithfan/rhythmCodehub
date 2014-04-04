@@ -1,4 +1,4 @@
-function sequence = bjorklundAlgorithm(pulses,totalN)
+function sequence = bjorklundAlgorithm(pulses, totalN, saveOrNot)
 
 % Generates Euclidean Rhythm using 'Bjorklund Algorithm'
 % Based on Bjorklund 2003 and Toussaint 2005
@@ -12,9 +12,14 @@ function sequence = bjorklundAlgorithm(pulses,totalN)
 
 % pulses = number of events 
 % totalN = total number of time bins
+% saveOrNot = whether or not you want to save the sequence < default to 0 >
 
 % see related: makePolyrhythm, playEuclideanRhythm
 % ======================================================================
+
+if ~exist('saveOrNot')
+    saveOrNot = 0;
+end
 
 if nargin == 0
     fprintf('You must specify the number of pulses and total number of time bins!\n');
@@ -61,9 +66,12 @@ sequence = num2str(sequence);
 sequence = arrayfun(@str2double, sequence);
 sequence = sequence(~isnan(sequence));
 
-cd('stim_mats')
-save(['euclidean_rhythm_' num2str(pulses) '_' num2str(totalN)],'sequence', 'pulses', 'totalN');
-cd ..
+if saveOrNot
+    cd('stim_mats')
+    save(['euclidean_rhythm_' num2str(pulses) '_' num2str(totalN)],'sequence', 'pulses', 'totalN');
+    cd ..
+end
+
 % fprintf('Saved your sequence. Done!\n');
    
 end
