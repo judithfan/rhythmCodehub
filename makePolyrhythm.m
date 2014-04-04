@@ -14,7 +14,17 @@ function seqs = makePolyrhythm(k1,k2,m1,m2,phaseShift,reps,shuffFlag)
 
 % Author: {Mariam Aly, Judy Fan}
 % Created: Mar 11 2014
-% Last updated: Mar 24 2014 by JEF
+% Last updated: Mar 25 2014 by JEF
+
+% Version log:
+% Mar 25 2014 / jef / 
+% (1) modified the periodic structure such that component
+% rhythms are concatenated without break, and then summed together to form
+% polyrhythm 
+% (2) added simple visualization of one rep of the polyrhythm and component
+% rhythms
+
+% 
 
 % see related: bjorklundAlgorithm, playEuclideanRhythm
 % ======================================================================
@@ -86,7 +96,7 @@ for thisBeat = 1:length(rhythm)
 end
 
 % play sound?
-% sound(y, Fs);  %# Play sound at sampling rate Fs
+sound(y, Fs);  %# Play sound at sampling rate Fs
 
 seqs.y = y;
 seqs.Fs = Fs;
@@ -101,6 +111,7 @@ cd ..
 seqs.stats.proportion = mean(rhythm);
 
 % make simple visualization
+close(1);
 f1 = figure(1);
 subplot(2,1,1);
 purple = [0.8 0.4 0.8];
@@ -116,12 +127,13 @@ xlabel('Time Bin')
 ylabel('Pulse Amplitude')
 title('Final Polyrhythm')
 subplot(2,1,2);
+jitter = 0.1;
 dataVec = seqs.single.comp1;
 plot(dataVec,'LineWidth',2,'Color',gray); hold on;
-scatter(1:length(dataVec),dataVec,40,peach,'filled'); hold on;
+scatter(1-jitter:length(dataVec)-jitter,dataVec,40,peach,'filled'); hold on;
 dataVec = seqs.single.comp2;
 plot(dataVec,'LineWidth',2,'Color',gray); hold on;
-scatter(1:length(dataVec),dataVec,40,blue,'filled'); hold on;
+scatter(1+jitter:length(dataVec)+jitter,dataVec,40,blue,'filled'); hold on;
 xlim([0 length(dataVec)+1]);
 ylim([-0.2 2.2]);
 xlabel('Time Bin')
